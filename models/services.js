@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const servicesSchema = new mongoose.Schema ({
-    name: String,
+    service: String,
     price: Number
 })
 
