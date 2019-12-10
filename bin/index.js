@@ -5,6 +5,7 @@
  */
 
 var app = require("../app");
+var db = require("../config/db");
 var debug = require("debug")("laundry-project-backend:server");
 var http = require("http");
 
@@ -24,8 +25,11 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(port, () => console.log("server running on port " + port));
+db.on("error", console.error.bind(console, "mongoose connection error"));
+db.once("open", function() {
+  console.log("Mongoose Connection Success");
+});
+server.listen(port, () => console.log("Server Running on Port " + port));
 server.on("error", onError);
 server.on("listening", onListening);
 
