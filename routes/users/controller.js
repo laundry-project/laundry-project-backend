@@ -4,18 +4,19 @@ module.exports = {
   addUser: (req, res) => {
     User.create(req.body)
       .then(result =>
-        res.send({
+        res.status(200).send({
           message: "user created",
           result
         })
       )
       .catch(error =>
-        res.send({
+        res.status(400).send({
           message: "user failed to add",
           error: error.stack
         })
       );
   },
+
   deleteUser: (req, res) => {
     User.findOneAndDelete({ _id: req.params.id }, { rawResult: true })
       .then(result =>
