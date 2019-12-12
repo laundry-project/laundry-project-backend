@@ -32,11 +32,51 @@ module.exports = {
       );
   },
   getOrdersById: (req, res) => {
-    Order.findById({ _id: req.params.id }).then(result=>
-      res.send({
-        message: "Orders with the id",
+    Order.findById({ _id: req.params.id })
+      .then(result =>
+        res.send({
+          message: "Orders with the id",
+          result
+        })
+      )
+      .catch(error =>
+        res.send({
+          message: "Error when update orders",
+          error: error.message
+        })
+      );
+  },
+  updateOrdersById: (req, res) => {
+    Order.findOneAndUpdate({ _id: req.params.id }, req.body, 
+      { new: true })
+      .then(result =>
+        res.send({
+          message: "All Orders Update",
+          result
+        })
+      )
+      .catch(error =>
+        res.send({
+          message: "Error when update orders",
+          error: error.stack
+        })
+      );
+  },
+  deleteOrdersById: (req, res) => {
+    Order.findByIdAndDelete ({ _id: req.params.id}
+      // ,{rawResult: true}
+    )
+    .then(result => 
+      res.send ({
+        message: 'Order Delete',
         result
       })
-    );
+      )
+      .catch(error => {
+        res.send ({
+          message: 'Delete Order Failed',
+          error: error.stack
+        })
+      })
   }
 };

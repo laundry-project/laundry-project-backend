@@ -1,7 +1,7 @@
 const User = require("../../models/user");
 
 module.exports = {
-  addUser: (req, res) => {
+  addUsers: (req, res) => {
     User.create(req.body)
       .then(result =>
         res.send({
@@ -16,23 +16,8 @@ module.exports = {
         })
       );
   },
-  deleteUser: (req, res) => {
-    User.findOneAndDelete({ _id: req.params.id }, { rawResult: true })
-      .then(result =>
-        res.send({
-          message: "user deleted",
-          result
-        })
-      )
-      .catch(error =>
-        res.send({
-          message: "failed delete user",
-          error: error.stack
-        })
-      );
-  },
 
-  updateUser: (req, res) => {
+  updateUsers: (req, res) => {
     User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
       .then(result =>
         res.send({
@@ -48,7 +33,7 @@ module.exports = {
       );
   },
 
-  getUser: (req, res) => {
+  getUsers: (req, res) => {
     User.find()
       .then(result =>
         res.send({
@@ -64,7 +49,7 @@ module.exports = {
       );
   },
 
-  getUserById: (req, res) => {
+  getUsersById: (req, res) => {
     User.findById({
       _id: req.params.id
     })
@@ -78,6 +63,21 @@ module.exports = {
         res.send({
           message: "error when get user with ID",
           error: error.stact
+        })
+      );
+  },
+  deleteUsers: (req, res) => {
+    User.findOneAndDelete({ _id: req.params.id }, { rawResult: true })
+      .then(result =>
+        res.send({
+          message: "user deleted",
+          result
+        })
+      )
+      .catch(error =>
+        res.send({
+          message: "failed delete user",
+          error: error.stack
         })
       );
   }
