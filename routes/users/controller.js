@@ -4,14 +4,30 @@ module.exports = {
   addUsers: (req, res) => {
     User.create(req.body)
       .then(result =>
-        res.send({
+        res.status(200).send({
           message: "user created",
           result
         })
       )
       .catch(error =>
-        res.send({
+        res.status(400).send({
           message: "user failed to add",
+          error: error.stack
+        })
+      );
+  },
+
+  deleteUser: (req, res) => {
+    User.findOneAndDelete({ _id: req.params.id }, { rawResult: true })
+      .then(result =>
+        res.send({
+          message: "user deleted",
+          result
+        })
+      )
+      .catch(error =>
+        res.send({
+          message: "failed delete user",
           error: error.stack
         })
       );
@@ -49,7 +65,55 @@ module.exports = {
       );
   },
 
-  getUsersById: (req, res) => {
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const existedUser = await User.findOne({ email: req.body.email });
+      if (existedUser) {
+        if (existedUser.password == password) {
+          res.status(200).send({
+            message: "login success",
+            existedUser
+          });
+        } else {
+          res.status(400).send({
+            message: "wrong password"
+          });
+        }
+      } else {
+        res.status(404).send({
+          message: "user not found"
+        });
+      }
+    } catch {
+      res.status(4000).send({
+        message: "something wrong when login"
+      });
+    }
+
+    // User.find({ email: req.body.email })
+    //   .then(result => {
+    //     console.log(result[0].password);
+    //     if (result.password == req.body.password) {
+    //       res.send({
+    //         message: "All User",
+    //         result
+    //       });
+    //     } else {
+    //       res.status(400).send({
+    //         message: "wrong password"
+    //       });
+    //     }
+    //   })
+    //   .catch(error =>
+    //     res.send({
+    //       message: "error when login",
+    //       error: error.stack
+    //     })
+    //   );
+  },
+
+  getUserById: (req, res) => {
     User.findById({
       _id: req.params.id
     })
