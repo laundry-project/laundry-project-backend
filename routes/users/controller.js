@@ -65,6 +65,54 @@ module.exports = {
       );
   },
 
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const existedUser = await User.findOne({ email: req.body.email });
+      if (existedUser) {
+        if (existedUser.password == password) {
+          res.status(200).send({
+            message: "login success",
+            existedUser
+          });
+        } else {
+          res.status(400).send({
+            message: "wrong password"
+          });
+        }
+      } else {
+        res.status(404).send({
+          message: "user not found"
+        });
+      }
+    } catch {
+      res.status(4000).send({
+        message: "something wrong when login"
+      });
+    }
+
+    // User.find({ email: req.body.email })
+    //   .then(result => {
+    //     console.log(result[0].password);
+    //     if (result.password == req.body.password) {
+    //       res.send({
+    //         message: "All User",
+    //         result
+    //       });
+    //     } else {
+    //       res.status(400).send({
+    //         message: "wrong password"
+    //       });
+    //     }
+    //   })
+    //   .catch(error =>
+    //     res.send({
+    //       message: "error when login",
+    //       error: error.stack
+    //     })
+    //   );
+  },
+
   getUserById: (req, res) => {
     User.findById({
       _id: req.params.id
