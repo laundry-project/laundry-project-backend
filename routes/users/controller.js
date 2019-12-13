@@ -64,7 +64,12 @@ module.exports = {
         })
       );
   },
-
+  logout: (req, res) => {
+    return res.status(200).json({
+      message: "logout successful",
+      isLoggedIn: false
+    });
+  },
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -73,7 +78,8 @@ module.exports = {
         if (existedUser.password == password) {
           res.status(200).send({
             message: "login success",
-            existedUser
+            existedUser,
+            isLoggedIn: true
           });
         } else {
           res.status(400).send({
@@ -144,5 +150,32 @@ module.exports = {
           error: error.stack
         })
       );
+  },
+  register: async (req, res) => {
+    try {
+      const { name, email, password, telephone } = req.body;
+      if (!name || !email || !password || !telephone) {
+        return res.status(400).json({
+          message: "body cannot be empty"
+        });
+      }
+      const existedUser = await User.findOne(user => user.email === email);
+      if (existedUser) {
+        return res.status(409).json({
+          message: "user already registered, please login"
+        });
+      }
+      Users.push({ name, email, password });
+      res.status(201).json({
+        message: "user successfully created",
+        name,
+        email
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "error in register route",
+        error: error.message
+      });
+    }
   }
 };
