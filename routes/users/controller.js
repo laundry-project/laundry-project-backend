@@ -51,6 +51,7 @@ module.exports = {
 
   getUsers: (req, res) => {
     User.find()
+    .populate('order')
       .then(result =>
         res.send({
           message: "All User",

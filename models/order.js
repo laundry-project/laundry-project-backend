@@ -6,7 +6,11 @@ const orderSchema = new mongoose.Schema({
   date: String,
   amount: Number,
   price: Number,
-  note: String
+  note: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }
 });
 
 const order = mongoose.model("order", orderSchema);

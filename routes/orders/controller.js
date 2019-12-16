@@ -8,6 +8,7 @@ module.exports = {
           message: "Order created",
           result
         })
+        .populate ('User')
       )
       .catch(error =>
         res.send({
