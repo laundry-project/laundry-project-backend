@@ -162,14 +162,14 @@ module.exports = {
           message: "body cannot be empty"
         });
       }
-      const existedUser = await User.findOne(user => user.email === email);
+      const existedUser = await User.findOne({email});
       if (existedUser) {
         return res.status(409).json({
           message: "user already registered, please login"
         });
       }
-      Users.push({ name, email, password });
-      res.status(201).json({
+      User.create({ name, email, password, telephone });
+      res.status(200).json({
         message: "user successfully created",
         name,
         email
