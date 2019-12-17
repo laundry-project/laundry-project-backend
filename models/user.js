@@ -6,7 +6,7 @@ const userSchema = new Schema({
   email: String,
   password: String,
   telephone: Number,
-  orderId: [{
+  orders: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "order"
   }]

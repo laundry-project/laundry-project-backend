@@ -51,7 +51,7 @@ module.exports = {
 
   getUsers: (req, res) => {
     User.find()
-    .populate('order')
+      .populate("orders")
       .then(result =>
         res.send({
           message: "All User",
@@ -124,6 +124,8 @@ module.exports = {
     User.findById({
       _id: req.params.id
     })
+      .populate("orders","service amount")
+
       .then(result =>
         res.send({
           message: "Your user with the ID",

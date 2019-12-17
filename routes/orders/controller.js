@@ -1,23 +1,30 @@
 const Order = require("../../models/order");
+const User = require("../../models/user");
 
 module.exports = {
-  addOrders: (req, res) => {
-    Order.create(req.body)
-      .then(result =>
-        res.send({
-          message: "Order created",
-          result
-          
-        })
-        .populate ('User')
-      )
-      .catch(error =>
-        res.send({
-          message: "failed to add",
-          error: error.stack
-        })
+  addOrders: async (req, res) => {
+    try {
+      const newOrder = await Order.create(req.body);
+
+      const user = await User.findOneAndUpdate(
+        { _id: newOrder.userId },
+        { $push: { orders: newOrder._id } },
+        { new: true }
       );
+
+      await res.send({
+        message: "Order created",
+        newOrder,
+        user
+      });
+    } catch (error) {
+      res.send({
+        message: "failed to create order",
+        error: error.stack
+      });
+    }
   },
+
   getOrders: (req, res) => {
     Order.find()
       .then(result =>
@@ -49,8 +56,7 @@ module.exports = {
       );
   },
   updateOrdersById: (req, res) => {
-    Order.findOneAndUpdate({ _id: req.params.id }, req.body, 
-      { new: true })
+    Order.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
       .then(result =>
         res.send({
           message: "All Orders Update",
@@ -65,20 +71,21 @@ module.exports = {
       );
   },
   deleteOrdersById: (req, res) => {
-    Order.findByIdAndDelete ({ _id: req.params.id}
+    Order.findByIdAndDelete(
+      { _id: req.params.id }
       // ,{rawResult: true}
     )
-    .then(result => 
-      res.send ({
-        message: 'Order Delete',
-        result
-      })
+      .then(result =>
+        res.send({
+          message: "Order Delete",
+          result
+        })
       )
       .catch(error => {
-        res.send ({
-          message: 'Delete Order Failed',
+        res.send({
+          message: "Delete Order Failed",
           error: error.stack
-        })
-      })
+        });
+      });
   }
 };
