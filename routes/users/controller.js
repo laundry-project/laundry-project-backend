@@ -124,7 +124,7 @@ module.exports = {
     User.findById({
       _id: req.params.id
     })
-      .populate("orders","service amount")
+      .populate("orders", "-userId")
 
       .then(result =>
         res.send({
@@ -135,7 +135,7 @@ module.exports = {
       .catch(error =>
         res.send({
           message: "error when get user with ID",
-          error: error.stact
+          error: error.stack
         })
       );
   },
@@ -162,7 +162,7 @@ module.exports = {
           message: "body cannot be empty"
         });
       }
-      const existedUser = await User.findOne({email});
+      const existedUser = await User.findOne({ email });
       if (existedUser) {
         return res.status(409).json({
           message: "user already registered, please login"
