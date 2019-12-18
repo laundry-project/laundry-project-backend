@@ -124,7 +124,7 @@ module.exports = {
     User.findById({
       _id: req.params.id
     })
-      .populate("orders","service amount")
+      .populate("orders","service amount address")
 
       .then(result =>
         res.send({
