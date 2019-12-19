@@ -40,7 +40,7 @@ module.exports = {
             user
           });
         } else {
-          throw new Error("Pesanan gagal");
+          throw new Error("Order Failed");
         }
       });
     } catch (error) {
