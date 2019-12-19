@@ -1,3 +1,5 @@
+const nodemailer = require("nodemailer");
+
 const Order = require("../../models/order");
 const User = require("../../models/user");
 
@@ -12,10 +14,34 @@ module.exports = {
         { new: true }
       );
 
-      await res.send({
-        message: "Order created",
-        newOrder,
-        user
+      let transporter = nodemailer.createTransport({
+        service: "gmail",
+        secure: false,
+        auth: {
+          user: "loundryproject@gmail.com",
+          pass: "loundryKomodo11!"
+        }
+      });
+
+      let message = {
+        from: " 'Admin 👻' <loundryproject@gmail.com>",
+        to: user.email,
+        subject: "Order Confirmation",
+        text: "Thank you, the booking has been booked, please pay later",
+        html:
+          "<h1>Thank you, the booking has been booked, please pay later</h1>"
+      };
+
+      await transporter.sendMail(message, err => {
+        if (!err) {
+          res.send({
+            message: "Order created",
+            newOrder,
+            user
+          });
+        } else {
+          throw new Error("Pesanan gagal");
+        }
       });
     } catch (error) {
       res.send({
