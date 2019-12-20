@@ -11,7 +11,8 @@ const orderSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
-  }
+  },
+  pickUpTime: String
 });
 
 const order = mongoose.model("order", orderSchema);
